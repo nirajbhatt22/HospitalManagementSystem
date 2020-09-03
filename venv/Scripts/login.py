@@ -3,6 +3,7 @@ from tkinter import ttk
 from tkinter import messagebox
 from pathlib import Path
 from main import *
+from admin import *
 import mysql.connector as mysql
 
 db_create = mysql.connect(
@@ -79,7 +80,8 @@ class login():
         if (len(email) != 0 and len(password) != 0):
             # Calling the user checking function
             if (email == "admin" and password == "admin123"):
-                print("Hello Admin")
+                hideLoginWindow()
+                admin(cursor,loginWindow,db)
 
             else:
                 query = "SELECT * FROM users WHERE email= %s AND password= %s LIMIT 1"

@@ -8,6 +8,7 @@ from editdoctor import *
 from addroom import *
 from editroom import *
 from addpatient import *
+from editpatient import *
 
 
 class main(object):
@@ -89,6 +90,7 @@ class main(object):
         def onDoubleClickPatient(event):
             global selectedPatient
             discharge_patient["state"] = NORMAL
+            edit_patient["state"] = NORMAL
             patient_selection = patientview.selection()
             p_selected = int(patient_selection[0])
             selectedPatient = patients[p_selected]
@@ -159,6 +161,7 @@ class main(object):
             delete_room["state"] = DISABLED
 
         def onClickEditRoom():
+            global selectedRoom
             editroom(self.cursor, self.db, roomview, add_room, edit_room, delete_room, selectedRoom)
             add_room["state"] = DISABLED
             edit_room["state"] = DISABLED
@@ -167,7 +170,7 @@ class main(object):
         def onClickDeleteRoom():
             global selectedRoom
             if (selectedRoom[2] == "Occupied"):
-                messagebox.showinfo("Error","Cannot delete occupied room")
+                messagebox.showinfo("Error", "Cannot delete occupied room")
             elif (messagebox.askokcancel("Delete?", "Are you sure want to Delete?")):
                 sql = "DELETE FROM rooms WHERE id = %s"
                 v = int(selectedRoom[0])
@@ -203,6 +206,20 @@ class main(object):
                              fg='black',
                              bg='white', command=onClickAddPatient)
         add_patient.place(relx=.10, rely=.40)
+
+        def onClickEditPatient():
+            global selectedPatient
+            editpatient(self.cursor, self.db, patientview, roomview, add_patient, discharge_patient, edit_patient,
+                         selectedPatient)
+            edit_patient["state"] = DISABLED
+            add_patient["state"] = DISABLED
+            discharge_patient["state"] = DISABLED
+
+        edit_patient = Button(tab_patients, text='EDIT PATIENT', font=('arial 12 normal'), width=30, height=2,
+                              fg='black',
+                              bg='white', command=onClickEditPatient)
+        edit_patient.place(relx=.50, rely=.40)
+        edit_patient["state"] = DISABLED
 
         # Doctors Tab
         # Doctors Tab
